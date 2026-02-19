@@ -3,114 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KASSY CHUKWU AURA</title>
+    <title>KASSY CHUKWU AURA | PRO SHOWROOM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background: #cbd5e1; padding: 16px; }
-        .card { background: white; border-radius: 24px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        h1 { background: #1e293b; color: white; padding: 16px 24px; border-radius: 16px; margin-bottom: 16px; font-size: 20px; }
-        h1 span { color: #60a5fa; }
-        input, textarea { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; margin-bottom: 12px; outline: none; background: #f8fafc; }
-        input:focus, textarea:focus { border-color: #2563eb; }
-        textarea { height: 100px; resize: none; }
-        button { width: 100%; background: #2563eb; color: white; font-size: 18px; font-weight: bold; padding: 18px; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        button:active { background: #1d4ed8; transform: scale(0.98); }
-        button:disabled { background: #93c5fd; cursor: not-allowed; }
-        #status { text-align: center; padding: 20px; font-weight: bold; color: #2563eb; font-size: 16px; display: none; }
-        #error { background: #fee2e2; color: #b91c1c; padding: 14px; border-radius: 12px; margin-top: 12px; font-weight: bold; display: none; }
-        #result { background: white; border-radius: 24px; padding: 24px; margin-top: 16px; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        #result h2 { color: #db2777; font-size: 22px; margin-bottom: 16px; text-transform: uppercase; }
-        #bookBody { white-space: pre-wrap; line-height: 1.8; color: #334155; font-size: 15px; }
-        .footer { text-align: center; color: #94a3b8; font-size: 10px; margin-top: 30px; text-transform: uppercase; letter-spacing: 3px; }
+        body { font-family: 'Inter', sans-serif; background: #cbd5e1; perspective: 1500px; overflow-x: hidden; }
+        .stage { height: 400px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .book { position: relative; width: 220px; height: 320px; transform-style: preserve-3d; transform: rotateY(-25deg) rotateX(10deg); transition: 0.5s ease; }
+        .front { width: 220px; height: 320px; background: white; z-index: 2; transform: translateZ(15px); border-radius: 2px 8px 8px 2px; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #ddd; }
+        .spine { width: 30px; height: 320px; background: #db2777; transform: rotateY(-90deg) translateZ(15px); left: -15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: bold; position: absolute; }
+        .spine-text { transform: rotate(90deg); white-space: nowrap; width: 320px; text-align: center; }
+        .pulse-section { background: #94a3b8; border-radius: 40px 40px 0 0; padding: 30px; margin-top: 20px; }
+        .pulse-card { min-width: 260px; background: white; padding: 15px; border-radius: 20px; flex-shrink: 0; display: flex; align-items: center; gap: 12px; }
     </style>
 </head>
 <body>
 
-    <h1>Kassy Chukwu <span>Aura &gt;</span></h1>
+    <div class="max-w-5xl mx-auto p-4">
+        <nav class="bg-[#1e293b] rounded-2xl p-4 flex justify-between items-center mb-6 text-white shadow-lg">
+            <div class="text-xl font-black uppercase">Kassy Chukwu <span class="text-blue-400">Aura ></span></div>
+            <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Feb 19, 2026</div>
+        </nav>
 
-    <div class="card">
-        <input type="password" id="apiKey" placeholder="Paste your Gemini API Key here..." />
-        <textarea id="bookTopic" placeholder="Enter your book or article title..."></textarea>
-        <button id="genBtn">✨ Generate Masterpiece</button>
-        <div id="error"></div>
+        <div class="bg-white rounded-[40px] p-8 shadow-2xl mb-10">
+            <h2 class="text-xl font-bold mb-4 text-slate-800">Create Undetectable Content</h2>
+            <textarea id="bookTopic" placeholder="Enter book or article title..." class="w-full h-28 p-5 bg-slate-50 rounded-3xl mb-6 outline-none border-2 border-transparent focus:border-blue-400 text-lg"></textarea>
+            <button onclick="ignite()" id="genBtn" class="w-full bg-[#2563eb] text-white font-black py-5 rounded-2xl text-xl uppercase shadow-xl hover:scale-[1.01] active:scale-95 transition-all">Generate Masterpiece</button>
+        </div>
+
+        <div id="showroom" class="hidden text-center animate-in fade-in duration-700">
+            <div class="stage">
+                <div class="book">
+                    <div class="front">
+                        <div class="text-[9px] text-pink-500 font-black uppercase tracking-widest">Premium Manuscript</div>
+                        <h2 id="displayTitle" class="text-2xl font-black text-slate-800 leading-tight"></h2>
+                        <div class="text-[10px] font-bold text-slate-400 border-t pt-2">KASSY CHUKWU AURA</div>
+                    </div>
+                    <div class="spine"><div id="spineTitle" class="spine-text uppercase"></div></div>
+                </div>
+            </div>
+            <div id="bookBody" class="max-w-2xl mx-auto bg-white p-10 rounded-[40px] text-left shadow-2xl mb-10 whitespace-pre-wrap font-medium text-slate-700 leading-relaxed italic border border-slate-100"></div>
+            
+            <div class="flex justify-center gap-4 mb-10">
+                <button class="bg-green-500 text-white px-8 py-4 rounded-full font-black text-xs uppercase shadow-lg">WhatsApp Client</button>
+                <button onclick="window.print()" class="bg-black text-white px-8 py-4 rounded-full font-black text-xs uppercase shadow-lg">Download PDF</button>
+            </div>
+        </div>
+
+        <div class="pulse-section">
+            <div class="flex gap-4 overflow-x-auto pb-8 no-scrollbar">
+                <div class="pulse-card">
+                    <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white"><i class="fab fa-tiktok"></i></div>
+                    <div><div class="text-[11px] font-black">TikTok Viral</div><div class="text-[10px] text-slate-400">#Gonglebots #vklass</div></div>
+                </div>
+                <div class="pulse-card">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white"><i class="fab fa-facebook-f"></i></div>
+                    <div><div class="text-[11px] font-black">Facebook Hot</div><div class="text-[10px] text-slate-400">#Ganebons #M witter</div></div>
+                </div>
+            </div>
+            <p class="text-center text-slate-100 font-bold text-[10px] mt-10 uppercase tracking-[0.3em] opacity-50">App is designed by Precious Alakpa</p>
+        </div>
     </div>
 
-    <div id="status">⏳ Aura is writing your masterpiece... Please wait...</div>
+    <script>
+        async function ignite() {
+            const topic = document.getElementById('bookTopic').value;
+            if(!topic) return alert("Please enter a title!");
+            const btn = document.getElementById('genBtn');
+            btn.innerText = "AURA IS CRAFTING...";
+            btn.disabled = true;
 
-    <div id="result">
-        <h2 id="displayTitle"></h2>
-        <div id="bookBody"></div>
-    </div>
+            // FIXED MODEL PATH FOR V1BETA
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyD8AEL1VHkSy8zNnyVeOslO2QPdoG84Yys`;
 
-    <div class="footer">App designed by Precious Alakpa</div>
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Write a beautiful, long book or article titled "${topic}". Use chapters. Act as a close friend. Ensure the tone is undetectable as AI. End with: "This work is digitally protected by Kassy Chukwu Aura."` }] }]
+                    })
+                });
 
-<script>
-    document.getElementById('genBtn').addEventListener('click', function() {
-        var apiKey = document.getElementById('apiKey').value.trim();
-        var topic = document.getElementById('bookTopic').value.trim();
-        var errorDiv = document.getElementById('error');
-        var statusDiv = document.getElementById('status');
-        var resultDiv = document.getElementById('result');
-        var btn = document.getElementById('genBtn');
+                const data = await res.json();
+                
+                if(data.error) {
+                    throw new Error(data.error.message);
+                }
 
-        errorDiv.style.display = 'none';
-        errorDiv.innerText = '';
+                const content = data.candidates[0].content.parts[0].text;
 
-        if (!apiKey) {
-            errorDiv.innerText = '❌ Please paste your Gemini API Key!';
-            errorDiv.style.display = 'block';
-            return;
-        }
+                document.getElementById('displayTitle').innerText = topic.toUpperCase();
+                document.getElementById('spineTitle').innerText = topic.toUpperCase();
+                document.getElementById('bookBody').innerText = content;
+                document.getElementById('showroom').classList.remove('hidden');
+                document.getElementById('showroom').scrollIntoView({ behavior: 'smooth' });
 
-        if (!topic) {
-            errorDiv.innerText = '❌ Please enter a title!';
-            errorDiv.style.display = 'block';
-            return;
-        }
-
-        btn.disabled = true;
-        btn.innerText = '⏳ Writing...';
-        statusDiv.style.display = 'block';
-        resultDiv.style.display = 'none';
-
-        var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey;
-
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: 'Write a long, detailed, professional book or article titled "' + topic + '". Use chapters with headings. Write like a friendly expert. Minimum 1000 words. End with: This work is digitally protected by Kassy Chukwu Aura.'
-                    }]
-                }]
-            })
-        })
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-            if (data.error) {
-                throw new Error(data.error.message);
+            } catch (e) {
+                alert("Aura Connection Failed: " + e.message);
+            } finally {
+                btn.innerText = "GENERATE MASTERPIECE";
+                btn.disabled = false;
             }
-            if (!data.candidates || !data.candidates[0]) {
-                throw new Error('No content returned. Please try again.');
-            }
-            var text = data.candidates[0].content.parts[0].text;
-            document.getElementById('displayTitle').innerText = topic.toUpperCase();
-            document.getElementById('bookBody').innerText = text;
-            resultDiv.style.display = 'block';
-            resultDiv.scrollIntoView({ behavior: 'smooth' });
-        })
-        .catch(function(e) {
-            errorDiv.innerText = '❌ ' + e.message;
-            errorDiv.style.display = 'block';
-        })
-        .finally(function() {
-            btn.disabled = false;
-            btn.innerText = '✨ Generate Masterpiece';
-            statusDiv.style.display = 'none';
-        });
-    });
-</script>
-
+        }
+    </script>
 </body>
 </html>
