@@ -10,34 +10,49 @@
         body { font-family: 'Inter', sans-serif; background: #cbd5e1; perspective: 1500px; overflow-x: hidden; }
         .stage { height: 400px; display: flex; align-items: center; justify-content: center; position: relative; }
         .book { position: relative; width: 220px; height: 320px; transform-style: preserve-3d; transform: rotateY(-25deg) rotateX(10deg); transition: 0.5s ease; }
-        .front { width: 220px; height: 320px; background: white; z-index: 2; transform: translateZ(15px); border-radius: 2px 8px 8px 2px; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #ddd; }
+        .front { width: 220px; height: 320px; background: white; z-index: 2; transform: translateZ(15px); border-radius: 2px 8px 8px 2px; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #ddd; position: relative; }
         .spine { width: 30px; height: 320px; background: #db2777; transform: rotateY(-90deg) translateZ(15px); left: -15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: bold; position: absolute; }
         .spine-text { transform: rotate(90deg); white-space: nowrap; width: 320px; text-align: center; }
         .pulse-section { background: #94a3b8; border-radius: 40px 40px 0 0; padding: 30px; margin-top: 20px; }
-        .pulse-card { min-width: 260px; background: white; padding: 15px; border-radius: 20px; flex-shrink: 0; display: flex; align-items: center; gap: 12px; }
+        .pulse-card { min-width: 260px; background: white; padding: 15px; border-radius: 20px; flex-shrink: 0; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .icon-circle { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
+<body class="p-0">
 
-    <div class="max-w-5xl mx-auto p-4">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
         <nav class="bg-[#1e293b] rounded-2xl p-4 flex justify-between items-center mb-6 text-white shadow-lg">
-            <div class="text-xl font-black uppercase">Kassy Chukwu <span class="text-blue-400">Aura ></span></div>
+            <div class="text-xl font-black uppercase tracking-tighter">Kassy Chukwu <span class="text-blue-400">Aura ></span></div>
             <div class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Feb 19, 2026</div>
         </nav>
 
-        <div class="bg-white rounded-[40px] p-8 shadow-2xl mb-10">
+        <div class="bg-white rounded-[40px] p-8 shadow-2xl mb-10 relative">
             <h2 class="text-xl font-bold mb-4 text-slate-800">Create Undetectable Content</h2>
-            <textarea id="bookTopic" placeholder="Enter book or article title..." class="w-full h-28 p-5 bg-slate-50 rounded-3xl mb-6 outline-none border-2 border-transparent focus:border-blue-400 text-lg"></textarea>
-            <button onclick="ignite()" id="genBtn" class="w-full bg-[#2563eb] text-white font-black py-5 rounded-2xl text-xl uppercase shadow-xl hover:scale-[1.01] active:scale-95 transition-all">Generate Masterpiece</button>
+            <div class="border-2 border-slate-100 rounded-3xl p-5 bg-slate-50 mb-6">
+                <textarea id="bookTopic" placeholder="Paste link, upload file, or type prompt..." class="w-full h-28 bg-transparent outline-none resize-none text-lg text-slate-700"></textarea>
+                <div class="flex gap-5 text-slate-400 text-sm mt-3">
+                    <i class="fas fa-paperclip"></i> <i class="fas fa-square-check"></i> <i class="fas fa-video"></i> <i class="fas fa-link"></i>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                <button class="bg-[#3b82f6] text-white font-bold py-4 rounded-xl text-[10px] uppercase">Video to Book</button>
+                <button class="bg-[#3b82f6] text-white font-bold py-4 rounded-xl text-[10px] uppercase">PDF Rewrite</button>
+                <button class="bg-[#3b82f6] text-white font-bold py-4 rounded-xl text-[10px] uppercase">Summarize</button>
+                <button class="bg-[#3b82f6] text-white font-bold py-4 rounded-xl text-[10px] uppercase">Gallery</button>
+            </div>
+            
+            <button onclick="ignite()" id="genBtn" class="w-full bg-[#2563eb] text-white font-black py-5 rounded-2xl text-xl uppercase shadow-xl hover:scale-[1.01] transition-all">Generate Masterpiece</button>
         </div>
 
-        <div id="showroom" class="hidden text-center animate-in fade-in duration-700">
+        <div id="showroom" class="hidden py-10 text-center animate-in fade-in duration-700">
             <div class="stage">
                 <div class="book">
                     <div class="front">
                         <div class="text-[9px] text-pink-500 font-black uppercase tracking-widest">Premium Manuscript</div>
                         <h2 id="displayTitle" class="text-2xl font-black text-slate-800 leading-tight"></h2>
-                        <div class="text-[10px] font-bold text-slate-400 border-t pt-2">KASSY CHUKWU AURA</div>
+                        <div class="text-[10px] font-bold text-slate-400 border-t pt-2 uppercase">Kassy Chukwu Aura</div>
                     </div>
                     <div class="spine"><div id="spineTitle" class="spine-text uppercase"></div></div>
                 </div>
@@ -45,62 +60,66 @@
             <div id="bookBody" class="max-w-2xl mx-auto bg-white p-10 rounded-[40px] text-left shadow-2xl mb-10 whitespace-pre-wrap font-medium text-slate-700 leading-relaxed italic border border-slate-100"></div>
             
             <div class="flex justify-center gap-4 mb-10">
-                <button class="bg-green-500 text-white px-8 py-4 rounded-full font-black text-xs uppercase shadow-lg">WhatsApp Client</button>
-                <button onclick="window.print()" class="bg-black text-white px-8 py-4 rounded-full font-black text-xs uppercase shadow-lg">Download PDF</button>
+                <button class="bg-green-500 text-white px-8 py-4 rounded-full font-black text-xs uppercase">WhatsApp Client</button>
+                <button onclick="window.print()" class="bg-black text-white px-8 py-4 rounded-full font-black text-xs uppercase">Download PDF</button>
             </div>
-        </div>
-
-        <div class="pulse-section">
-            <div class="flex gap-4 overflow-x-auto pb-8 no-scrollbar">
-                <div class="pulse-card">
-                    <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white"><i class="fab fa-tiktok"></i></div>
-                    <div><div class="text-[11px] font-black">TikTok Viral</div><div class="text-[10px] text-slate-400">#Gonglebots #vklass</div></div>
-                </div>
-                <div class="pulse-card">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white"><i class="fab fa-facebook-f"></i></div>
-                    <div><div class="text-[11px] font-black">Facebook Hot</div><div class="text-[10px] text-slate-400">#Ganebons #M witter</div></div>
-                </div>
-            </div>
-            <p class="text-center text-slate-100 font-bold text-[10px] mt-10 uppercase tracking-[0.3em] opacity-50">App is designed by Precious Alakpa</p>
         </div>
     </div>
 
+    <div class="pulse-section">
+        <div class="max-w-5xl mx-auto">
+            <h3 class="text-white font-black text-lg mb-6 flex justify-between items-center px-2">Social Pulse</h3>
+            <div class="flex gap-4 overflow-x-auto pb-8 no-scrollbar px-2">
+                <div class="pulse-card">
+                    <div class="icon-circle bg-black"><i class="fab fa-tiktok"></i></div>
+                    <div><div class="text-[11px] font-black">TikTok</div><div class="text-[10px] text-slate-400 font-bold">#Gonglebots #vklass</div></div>
+                </div>
+                <div class="pulse-card">
+                    <div class="icon-circle bg-[#1877F2]"><i class="fab fa-facebook-f"></i></div>
+                    <div><div class="text-[11px] font-black">Facebook</div><div class="text-[10px] text-slate-400 font-bold">#Ganebons #M witter</div></div>
+                </div>
+                <div class="pulse-card">
+                    <div class="icon-circle bg-gradient-to-tr from-yellow-400 to-purple-600"><i class="fab fa-instagram"></i></div>
+                    <div><div class="text-[11px] font-black">Instagram</div><div class="text-[10px] text-slate-400 font-bold">#Mamgrred #KI witter</div></div>
+                </div>
+            </div>
+        </div>
+        
+        <p class="text-center text-slate-100 font-bold text-[10px] mt-10 uppercase tracking-[0.3em] opacity-40">App is designed by Precious Alakpa</p>
+    </div>
+
     <script>
+        // NEW API KEY INTEGRATED
+        const API_KEY = "AIzaSyACvJPmrAr-SYTorR0CghJQbmIg02uZZ-g";
+
         async function ignite() {
             const topic = document.getElementById('bookTopic').value;
-            if(!topic) return alert("Please enter a title!");
+            if(!topic) return alert("Please enter a title or prompt!");
             const btn = document.getElementById('genBtn');
             btn.innerText = "AURA IS CRAFTING...";
             btn.disabled = true;
-
-            // FIXED MODEL PATH FOR V1BETA
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyD8AEL1VHkSy8zNnyVeOslO2QPdoG84Yys`;
+            
+            // STABLE MODEL PATH
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
             try {
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Write a beautiful, long book or article titled "${topic}". Use chapters. Act as a close friend. Ensure the tone is undetectable as AI. End with: "This work is digitally protected by Kassy Chukwu Aura."` }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Write a long, professional, human-style book or article titled "${topic}". Use chapters. Act as a close friend. Tone: Undetectable. End with: "This work is digitally protected by Kassy Chukwu Aura."` }] }] })
                 });
-
                 const data = await res.json();
                 
-                if(data.error) {
-                    throw new Error(data.error.message);
-                }
+                if(data.error) throw new Error(data.error.message);
 
-                const content = data.candidates[0].content.parts[0].text;
-
+                const bookText = data.candidates[0].content.parts[0].text;
                 document.getElementById('displayTitle').innerText = topic.toUpperCase();
                 document.getElementById('spineTitle').innerText = topic.toUpperCase();
-                document.getElementById('bookBody').innerText = content;
+                document.getElementById('bookBody').innerText = bookText;
                 document.getElementById('showroom').classList.remove('hidden');
                 document.getElementById('showroom').scrollIntoView({ behavior: 'smooth' });
-
             } catch (e) {
-                alert("Aura Connection Failed: " + e.message);
+                alert("Aura Error: " + e.message);
             } finally {
                 btn.innerText = "GENERATE MASTERPIECE";
                 btn.disabled = false;
